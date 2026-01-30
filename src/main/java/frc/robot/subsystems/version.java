@@ -33,11 +33,7 @@ public class version extends SubsystemBase {
   private PoseEstimate botpose = new PoseEstimate();
   private Pose2d pose2d = new Pose2d();
   public static Pigeon2 PIGEON2 = new Pigeon2(0);
-  private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
-      new Translation2d(0.32385, 0.32385),
-      new Translation2d(0.32385, -0.32385),
-      new Translation2d(-0.32385, 0.32385),
-      new Translation2d(-0.32385, -0.32385));
+  private final SwerveDriveKinematics kinematics = constants.kinematics;
   private SwerveModulePosition[] modulePositions = constants.modulePositions;
   public Rotation2d gyroAngle = new Rotation2d(0);
   public final Encoder drive_Encoder;

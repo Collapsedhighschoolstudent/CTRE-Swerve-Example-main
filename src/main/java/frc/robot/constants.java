@@ -3,6 +3,8 @@ package frc.robot;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 
@@ -15,6 +17,11 @@ public class constants {
     new SwerveModulePosition(0, new Rotation2d()),
     new SwerveModulePosition(0, new Rotation2d()),
     new SwerveModulePosition(0, new Rotation2d()),};
+    public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
+      new Translation2d(0.32385, 0.32385),
+      new Translation2d(0.32385, -0.32385),
+      new Translation2d(-0.32385, 0.32385),
+      new Translation2d(-0.32385, -0.32385));
    
 
 }
