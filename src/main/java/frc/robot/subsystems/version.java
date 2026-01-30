@@ -11,16 +11,21 @@ import edu.wpi.first.math.geometry .Pose2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.math.geometry.Translation2d;
+
+import static edu.wpi.first.units.Units.Rotation;
 
 //import org.opencv.features2d.GFTTDetector;
 
-//import com.ctre.phoenix6.swerve.SwerveDrivetrain;992
+//import com.ctre.phoenix6.swerve.SwerveDrivetrain;
+import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 
 import frc.robot.LimelightHelpers;
 import frc.robot.LimelightHelpers.PoseEstimate;
+import frc.robot.constants;
 
 
 
@@ -28,25 +33,25 @@ public class version extends SubsystemBase {
   private final Field2d field2d = new Field2d();
   private PoseEstimate botpose = new PoseEstimate();
   private Pose2d pose2d = new Pose2d();
+  public static  Pigeon2 PIGEON2 = new Pigeon2(0);
   private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
       new Translation2d(0.32385, 0.32385),
       new Translation2d(0.32385, -0.32385),
       new Translation2d(-0.32385, 0.32385),
       new Translation2d(-0.32385, -0.32385)
   );
-  private final SwerveModulePosition[] modulePositions = new SwerveModulePosition[]{
-    new SwerveModulePosition(),
-    new SwerveModulePosition(),
-    new SwerveModulePosition(),
-    new SwerveModulePosition(),
-};
-  private  Rotation2d gyroAngle = new Rotation2d(0);
-  private final SwerveDrivePoseEstimator poseversion = new SwerveDrivePoseEstimator(kinematics, gyroAngle, modulePositions, pose2d);
+  private  SwerveModulePosition[] modulePositions =  constants.modulePositions;
+  public   Rotation2d gyroAngle = new Rotation2d(0);
+  private  SwerveDrivePoseEstimator poseversion = new SwerveDrivePoseEstimator(kinematics, gyroAngle, modulePositions, pose2d);
+  
 
   
   public version() {
       SmartDashboard.putData("Field", field2d);
       SmartDashboard.putData("", field2d);
+      
+    
+      
   }
 
   @Override
@@ -57,8 +62,16 @@ public class version extends SubsystemBase {
       System.out.print(e);
     }
   
+  
+   
+    
+    LimelightHelpers.SetRobotOrientation("LimeLight", poseversion.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+    gyroAngle = new Rotation2d(PIGEON2.getYaw().getValue());
+    getPositions();
+    modulePositions = getPositions();
     poseversion.update(gyroAngle, modulePositions);
-    LimelightHelpers.SetRobotOrientation("Limelight", poseversion.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+
+
     try{poseversion.addVisionMeasurement(botpose.pose, botpose.timestampSeconds);
     pose2d = poseversion.getEstimatedPosition();
     field2d.setRobotPose(pose2d);}
@@ -67,4 +80,18 @@ public class version extends SubsystemBase {
     }
     
   }
+  
+public static SwerveModulePosition FL;
+public static SwerveModulePosition FR;
+public static SwerveModulePosition BL;
+public static SwerveModulePosition BR;
+public static SwerveModulePosition[] getPositions() {
+
+    return new SwerveModulePosition[] {
+        FL,
+        FR,
+        BL,
+        BR
+    };
+}
 }
