@@ -20,6 +20,7 @@ import static edu.wpi.first.units.Units.Rotation;
 
 //import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.hardware.Pigeon2;
+import edu.wpi.first.wpilibj.Encoder;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 
@@ -42,6 +43,8 @@ public class version extends SubsystemBase {
   );
   private  SwerveModulePosition[] modulePositions =  constants.modulePositions;
   public   Rotation2d gyroAngle = new Rotation2d(0);
+  public final Encoder drive_Encoder ;
+  public final Encoder turn_Encoder ;
   private  SwerveDrivePoseEstimator poseversion = new SwerveDrivePoseEstimator(kinematics, gyroAngle, modulePositions, pose2d);
   
 
@@ -49,6 +52,9 @@ public class version extends SubsystemBase {
   public version() {
       SmartDashboard.putData("Field", field2d);
       SmartDashboard.putData("", field2d);
+      drive_Encoder = new Encoder(0, 1);
+      turn_Encoder = new Encoder(0, 1);
+
       
     
       
@@ -67,8 +73,13 @@ public class version extends SubsystemBase {
     
     LimelightHelpers.SetRobotOrientation("LimeLight", poseversion.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
     gyroAngle = new Rotation2d(PIGEON2.getYaw().getValue());
-    getPositions();
-    modulePositions = getPositions();
+    getPosition();
+    modulePositions = new SwerveModulePosition[]{
+      getPosition(),
+      getPosition(),
+      getPosition(),
+      getPosition()
+    };
     poseversion.update(gyroAngle, modulePositions);
 
 
@@ -80,18 +91,9 @@ public class version extends SubsystemBase {
     }
     
   }
-  
-public static SwerveModulePosition FL;
-public static SwerveModulePosition FR;
-public static SwerveModulePosition BL;
-public static SwerveModulePosition BR;
-public static SwerveModulePosition[] getPositions() {
+public SwerveModulePosition getPosition() {
+    return new SwerveModulePosition(
+        drive_Encoder.getDistance(), new Rotation2d(turn_Encoder.getDistance()));
+  }
+}
 
-    return new SwerveModulePosition[] {
-        FL,
-        FR,
-        BL,
-        BR
-    };
-}
-}
