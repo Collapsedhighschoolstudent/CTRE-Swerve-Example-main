@@ -65,7 +65,6 @@ public class version extends SubsystemBase {
     LimelightHelpers.SetRobotOrientation("LimeLight", poseversion.getEstimatedPosition().getRotation().getDegrees(), 0,
         0, 0, 0, 0);
     gyroAngle = new Rotation2d(PIGEON2.getYaw().getValue());
-    getPosition();
     modulePositions = new SwerveModulePosition[] {
     getPosition()
     };
